@@ -1,0 +1,13 @@
+
+#snakeBoard {
+    margin: auto;
+    display: block;
+    border: medium solid black;
+    height: 800px;
+    width: 1200px;
+
+ }
+
+#e_econocom {
+    display: none
+}

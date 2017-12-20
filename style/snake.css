@@ -1,4 +1,7 @@
-
+#titre {
+    color: blue;
+    text-align: center;
+}
 #snakeBoard {
     margin: auto;
     display: block;

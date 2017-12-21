@@ -4,6 +4,7 @@ $(document).ready(function () {
     // Initialisation position Icone Econocom
     var ex = 10;
     var ey = 10;
+    var serpent =[10,10];
     // Initialisation position Cercle
     var cf = 2;
     var cg = 0;
@@ -15,46 +16,48 @@ $(document).ready(function () {
     var titre = $("#titre");
 
     var coordonneesPommes = [];
-    for (i = 0; i < 100; i++) {
+    loadFruit();
+
+    function loadFruit (){
         var cSize = cf + 1;
         var newCx;
         var newCy;
-        var perimetrePomme = 5;
-        var testPommeValide = false;
-        // Test qu'aucune colision n'est présente avec une autre pomme
-        while (!testPommeValide) {
-            newCx = getNombreAleatoire(cSize, (canvasWidth - cSize));
-            newCy = getNombreAleatoire(cSize, (canvasHeight - cSize));
-
-            if (coordonneesPommes.length == 0) {
-                testPommeValide = true;
-            } else {
-                for (j = 0; j < coordonneesPommes.length; j++) {
-                    var pomme = coordonneesPommes[j];
-                    var cx = pomme[0];
-                    var cy = pomme[1];
-                    /*var xMinValid = (newCx <= (cx - perimetrePomme) && newCx >= (0 + cf));
-                    var xMaxValid = (newCx >= (cx + cSize + perimetrePomme) && newCx <= (canvasWidth - cf));
-                    var xValid = xMinValid || xMaxValid;
-                    var yMinValid = (newCy <= (cy - perimetrePomme) && newCy >= (0 + cf));
-                    var yMaxValid = (newCy >= (cy + cSize + perimetrePomme) && newCy <= (canvasHeight - cf));
-                    var yValid = yMinValid || yMaxValid;*/
-                    var xInvalid = (newCx >= (cx - 5) && newCx <= (cx + 5 + cSize));
-                    var yInvalid = (newCy >= (cy - 5) && newCy <= (cy + 5 + cSize));
-                    testPommeValide = !(xInvalid && yInvalid);
-                    if (!testPommeValide) {
-                        console.log("colision");
-                        break;
-                    }
-                    if(j = coordonneesPommes.length -1) {
-
-                    }
+        newCx = getNombreAleatoire(cSize, (canvasWidth - cSize));
+        newCy = getNombreAleatoire(cSize, (canvasHeight - cSize));
+        if(coordonneesPommes.length == 10){
+            return true;
+        }else if(coordonneesPommes.length == 0){
+            var col = false;
+        }else{
+            var col = false;
+            for (j = 0; j < coordonneesPommes.length; j++) {
+                var pomme = coordonneesPommes[j];
+                testPommeValide = collision(pomme,newCx,newCy,5);
+                if(testPommeValide){
+                    col = true;
                 }
+            
+        
             }
         }
-        coordonneesPommes.push([newCx, newCy]);
-        insertCircle(newCx, newCy);
+        var colS = collision (serpent,newCx,newCy,20);
+        if (colS){
+            col=true;
+        }
+        if(!col ){
+            coordonneesPommes.push([newCx, newCy]);
+            insertCircle(newCx, newCy);
+        }
+        loadFruit();
     }
+
+    function collision(element,newCx,newCy,space){
+        var cSize = cf + 1;
+        var xInvalid = (newCx >= (element[0] - space) && newCx <= (element[0] + space + cSize));
+        var yInvalid = (newCy >= (element[1] - space) && newCy <= (element[1] + space + cSize));
+        return (xInvalid && yInvalid);
+    }
+             var yInvalid = (newCy >= (cy - 5) && newCy <= (cy + 5 + cSize));
 
     $("body").keydown(function (event) {
         var keyPress = event.which;

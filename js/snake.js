@@ -15,14 +15,46 @@ $(document).ready(function () {
     var titre = $("#titre");
 
     var coordonneesPommes = [];
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < 100; i++) {
         var cSize = cf + 1;
-        var cx = getNombreAleatoire(cSize, (canvasWidth - cSize));
-        var cy = getNombreAleatoire(cSize, (canvasHeight - cSize));
-        coordonneesPommes.push([cx, cy])
-        insertCircle(cx, cy);
-    }
+        var newCx;
+        var newCy;
+        var perimetrePomme = 5;
+        var testPommeValide = false;
+        // Test qu'aucune colision n'est présente avec une autre pomme
+        while (!testPommeValide) {
+            newCx = getNombreAleatoire(cSize, (canvasWidth - cSize));
+            newCy = getNombreAleatoire(cSize, (canvasHeight - cSize));
 
+            if (coordonneesPommes.length == 0) {
+                testPommeValide = true;
+            } else {
+                for (j = 0; j < coordonneesPommes.length; j++) {
+                    var pomme = coordonneesPommes[j];
+                    var cx = pomme[0];
+                    var cy = pomme[1];
+                    /*var xMinValid = (newCx <= (cx - perimetrePomme) && newCx >= (0 + cf));
+                    var xMaxValid = (newCx >= (cx + cSize + perimetrePomme) && newCx <= (canvasWidth - cf));
+                    var xValid = xMinValid || xMaxValid;
+                    var yMinValid = (newCy <= (cy - perimetrePomme) && newCy >= (0 + cf));
+                    var yMaxValid = (newCy >= (cy + cSize + perimetrePomme) && newCy <= (canvasHeight - cf));
+                    var yValid = yMinValid || yMaxValid;*/
+                    var xInvalid = (newCx >= (cx - 5) && newCx <= (cx + 5 + cSize));
+                    var yInvalid = (newCy >= (cy - 5) && newCy <= (cy + 5 + cSize));
+                    testPommeValide = !(xInvalid && yInvalid);
+                    if (!testPommeValide) {
+                        console.log("colision");
+                        break;
+                    }
+                    if(j = coordonneesPommes.length -1) {
+
+                    }
+                }
+            }
+        }
+        coordonneesPommes.push([newCx, newCy]);
+        insertCircle(newCx, newCy);
+    }
 
     $("body").keydown(function (event) {
         var keyPress = event.which;
@@ -30,12 +62,10 @@ $(document).ready(function () {
         insertIcon();
         for (i = 0; i < coordonneesPommes.length; i++) {
             var pommeCourante = coordonneesPommes[i];
-            console.log(pommeCourante);
             var PommeCx = pommeCourante[0];
             var PommeCy = pommeCourante[1];
             insertCircle(PommeCx, PommeCy);
         }
-
     });
 
     function getNombreAleatoire(min, max) {
@@ -72,7 +102,6 @@ $(document).ready(function () {
         // else {
         //     alert('stop');
         // }
-        console.log('ex=' + ex + ' | ey=' + ey);
     };
 });
 

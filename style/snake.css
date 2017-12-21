@@ -1,11 +1,11 @@
 #titre {
-    color: blue;
+    color:yellow;
     text-align: center;
 }
 #snakeBoard {
     margin: auto;
     display: block;
-    border: medium solid black;
+    border: medium solid greenyellow;
     height: 800px;
     width: 1200px;
 

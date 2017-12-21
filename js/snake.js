@@ -11,12 +11,19 @@ $(document).ready(function () {
 
     var canvasWidth = 300;
     var canvasHeight = 150;
+
     insertIcon();
     var image = $("#e_conocom");
     var titre = $("#titre");
 
     var coordonneesPommes = [];
     loadFruit();
+    var coordonneesQueue = [];
+
+    for (var i = 8; i >= 2; i -= 2) {
+        coordonneesQueue.push([i, 11]);
+    };
+    insertTail()
 
     function loadFruit() {
         var cSize = cf + 1;
@@ -88,6 +95,18 @@ $(document).ready(function () {
         }
     };
 
+    function insertTail() {
+        var tailSizePart = 2;
+        for (i = 0; i < coordonneesQueue.length; i++) {
+            var partieQueue = coordonneesQueue[i];
+            var partieX = partieQueue[0];
+            var partieY = partieQueue[1];
+            ctx.rect(partieX, partieY, tailSizePart, tailSizePart);
+        }
+        
+        ctx.stroke();
+    };
+
     function move(keyPress) {
         if (keyPress == 37 && ex > 0) {
             ex -= 1;
@@ -109,7 +128,7 @@ $(document).ready(function () {
                 indexToRemove = i;
             }
         }
-        if((typeof(indexToRemove) !== 'undefined')) {
+        if ((typeof (indexToRemove) !== 'undefined')) {
             coordonneesPommes.splice(indexToRemove, 1);
         }
     };

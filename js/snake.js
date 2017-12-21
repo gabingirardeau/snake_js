@@ -5,8 +5,6 @@ $(document).ready(function () {
     var ex = 10;
     var ey = 10;
     // Initialisation position Cercle
-    var cx = 8;
-    var cy = 4;
     var cf = 2;
     var cg = 0;
 
@@ -16,27 +14,35 @@ $(document).ready(function () {
     var image = $("#e_conocom");
     var titre = $("#titre");
 
+    var coordonneesPommes = [];
     for (i = 0; i < 10; i++) {
-        cx = getRndInteger(0, canvasWidth);
-        cy = getRndInteger(0, canvasHeight);
-        insertCircle();
+        var cSize = cf + 1;
+        var cx = getNombreAleatoire(cSize, (canvasWidth - cSize));
+        var cy = getNombreAleatoire(cSize, (canvasHeight - cSize));
+        coordonneesPommes.push([cx, cy])
+        insertCircle(cx, cy);
     }
 
-    console.log(image.innerWidth());
-    console.log(image.innerHeight());
 
     $("body").keydown(function (event) {
         var keyPress = event.which;
         move(keyPress);
         insertIcon();
-        insertCircle();
+        for (i = 0; i < coordonneesPommes.length; i++) {
+            var pommeCourante = coordonneesPommes[i];
+            console.log(pommeCourante);
+            var PommeCx = pommeCourante[0];
+            var PommeCy = pommeCourante[1];
+            insertCircle(PommeCx, PommeCy);
+        }
+
     });
 
-    function getRndInteger(min, max) {
+    function getNombreAleatoire(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     };
 
-    function insertCircle() {
+    function insertCircle(cx, cy) {
 
         ctx.beginPath();
         ctx.arc(cx, cy, cf, cg, 2 * Math.PI);

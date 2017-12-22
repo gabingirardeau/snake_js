@@ -4,6 +4,7 @@ $(document).ready(function () {
     // Initialisation position Icone Econocom
     var ex = 10;
     var ey = 10;
+    var positionQueue = ey + 1;
     var eWidth = 6;
     var eHeight = 5;
     // Initialisation position Cercle
@@ -18,8 +19,8 @@ $(document).ready(function () {
     var titre = $("#titre");
 
     var coordonneesQueue = [];
-    for (i = 8; i >= 2; i -= 2) {
-        coordonneesQueue.push([i, 11]);
+    for (i = 2; i <= 8; i += 2) {
+        coordonneesQueue.push([i, positionQueue]);
     }
 
     insertTail();
@@ -64,6 +65,7 @@ $(document).ready(function () {
         var keyPress = event.which;
         move(keyPress);
         insertIcon();
+        insertTail();
         for (i = 0; i < coordonneesPommes.length; i++) {
             var pommeCourante = coordonneesPommes[i];
             var PommeCx = pommeCourante[0];
@@ -114,6 +116,11 @@ $(document).ready(function () {
         } else if (keyPress == 40 && ey < (canvasHeight - eHeight)) {
             ey += 1
         }
+
+        coordonneesQueue.splice(0, 1);
+        coordonneesQueue.push([ex, ey + 1]);
+        console.log(coordonneesQueue);
+
         mangeFruits([ex, ey]);
     };
 
@@ -128,6 +135,7 @@ $(document).ready(function () {
         }
         if((typeof(indexToRemove) !== 'undefined')) {
             coordonneesPommes.splice(indexToRemove, 1);
+            coordonneesQueue.push([ex + 2, ey + 1]);
         }
     }
 });

@@ -101,10 +101,22 @@ $(document).ready(function () {
         } else if (keyPress == 40 && ey < (canvasHeight - eHeight)) {
             ey += 1
         }
-      
+        mangeFruits([ex, ey]);
     };
 
-    
+    function mangeFruits(e) {
+                var indexToRemove;
+        for (i = 0; i < coordonneesPommes.length; i++) {
+            var pomme = coordonneesPommes[i];
+            var collisionPomme = collision(pomme, e, eWidth, 0);
+            if (collisionPomme) {
+                indexToRemove = i;
+            }
+        }
+        if((typeof(indexToRemove) !== 'undefined')) {
+            coordonneesPommes.splice(indexToRemove, 1);
+        }
+    }
 });
 
 

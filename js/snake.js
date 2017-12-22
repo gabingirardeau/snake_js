@@ -17,10 +17,16 @@ $(document).ready(function () {
     var image = $("#e_conocom");
     var titre = $("#titre");
 
+    var coordonneesQueue = [];
+    for (i = 8; i >= 2; i -= 2) {
+        coordonneesQueue.push([i, 11]);
+    }
+
+    insertTail();
+
     var coordonneesPommes = [];
     var nbPommes = 100;
     for (i = 0; i < nbPommes; i++) {
-        
         var newCx;
         var newCy;
         var perimetrePomme = 5;
@@ -75,12 +81,19 @@ $(document).ready(function () {
         return Math.floor(Math.random() * (max - min)) + min;
     };
 
-    function insertCircle(cx, cy) {
+    function insertTail() {
+        var tailPartSize = 2;
+        for (i = 0; i < coordonneesQueue.length; i++) {
+            var partieQueue = coordonneesQueue[i];
+            ctx.rect(partieQueue[0], partieQueue[1], tailPartSize, tailPartSize);
+            ctx.stroke();
+        }
+    }
 
+    function insertCircle(cx, cy) {
         ctx.beginPath();
         ctx.arc(cx, cy, cf, cg, 2 * Math.PI);
         ctx.stroke();
-
     }
 
     function insertIcon() {

@@ -20,7 +20,7 @@ $(document).ready(function () {
     loadFruit();
     var coordonneesQueue = [];
 
-    for (var i = 8; i >= 2; i -= 2) {
+    for (var i = 2; i <= 8; i += 2) {
         coordonneesQueue.push([i, 11]);
     };
 
@@ -120,6 +120,14 @@ $(document).ready(function () {
             ey += 1
         }
 
+        // Deplacement de la queue
+        coordonneesQueue.splice(0, 1);
+        coordonneesQueue.push([ex - 2, ey + 1]);
+
+        mangeFruits([ex, ey]);  
+    };
+
+    function mangeFruits(e) {
         var indexToRemove;
         for (i = 0; i < coordonneesPommes.length; i++) {
             var pomme = coordonneesPommes[i];
@@ -132,8 +140,9 @@ $(document).ready(function () {
         }
         if ((typeof (indexToRemove) !== 'undefined')) {
             coordonneesPommes.splice(indexToRemove, 1);
+            coordonneesQueue.push([ex - 2, ey + 1]);
         }
-    };
+    }
 });
 
 

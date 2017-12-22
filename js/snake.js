@@ -23,7 +23,9 @@ $(document).ready(function () {
     for (var i = 8; i >= 2; i -= 2) {
         coordonneesQueue.push([i, 11]);
     };
-    insertTail()
+
+    insertTail();
+    
 
     function loadFruit() {
         var cSize = cf + 1;
@@ -56,14 +58,6 @@ $(document).ready(function () {
         loadFruit();
     }
 
-    function collision(element, newCx, newCy, space) {
-        var cSize = cf + 1;
-        var xInvalid = (newCx >= (element[0] - space) && newCx <= (element[0] + space + cSize));
-        var yInvalid = (newCy >= (element[1] - space) && newCy <= (element[1] + space + cSize));
-        return (xInvalid && yInvalid);
-    }
-
-
     $("body").keydown(function (event) {
         var keyPress = event.which;
         move(keyPress);
@@ -74,8 +68,16 @@ $(document).ready(function () {
             var PommeCy = pommeCourante[1];
             insertCircle(PommeCx, PommeCy);
         }
+        insertTail()
     });
 
+    function collision(element, newCx, newCy, space) {
+        var cSize = cf + 1;
+        var xInvalid = (newCx >= (element[0] - space) && newCx <= (element[0] + space + cSize));
+        var yInvalid = (newCy >= (element[1] - space) && newCy <= (element[1] + space + cSize));
+        return (xInvalid && yInvalid);
+    }
+   
     function getNombreAleatoire(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     };

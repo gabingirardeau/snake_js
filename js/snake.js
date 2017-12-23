@@ -65,9 +65,15 @@ $(document).ready(function () {
     $("body").keydown(function (event) {
         var keyPress = event.which;
         move(keyPress);
-        insertIcon();
-        insertPommes();
-        insertTail();
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        if(coordonneesPommes.length == 0) {  
+            ctx.font = "50px Arial";
+            ctx.strokeText("YOU WIN !", 30, 90);
+        } else {
+            insertIcon();
+            insertPommes();
+            insertTail();
+        }
     });
 
     function collision(newElementPosition, elementPosition, elementSize,  perimeter) {
@@ -83,8 +89,8 @@ $(document).ready(function () {
         var tailSizePart = 2;
         for (i = 0; i < coordonneesQueue.length; i++) {
             var partieQueue = coordonneesQueue[i];
-            ctx.rect(partieQueue[0], partieQueue[1], tailSizePart, tailSizePart);
-            ctx.stroke();
+            insertRect(partieQueue[0], partieQueue[1], tailSizePart);
+
         }
     }
 
@@ -101,10 +107,15 @@ $(document).ready(function () {
         ctx.beginPath();
         ctx.arc(cx, cy, cf, cg, 2 * Math.PI);
         ctx.stroke();
-    }
+    };
+
+
+    function insertRect(cx, cy, size) {
+        ctx.rect(cx, cy, size, size);
+        ctx.stroke();
+    };
 
     function insertIcon() {
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         var img = $("#e_econocom");
         if (img.get(0)) {
             ctx.drawImage(img.get(0), ex, ey);

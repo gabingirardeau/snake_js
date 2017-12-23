@@ -18,15 +18,8 @@ $(document).ready(function () {
     var image = $("#e_conocom");
     var titre = $("#titre");
 
-    var coordonneesQueue = [];
-    for (i = 2; i <= 8; i += 2) {
-        coordonneesQueue.push([i, positionQueue]);
-    }
-
-    insertTail();
-
     var coordonneesPommes = [];
-    var nbPommes = 100;
+    var nbPommes = 10;
     for (i = 0; i < nbPommes; i++) {
         var newCx;
         var newCy;
@@ -58,20 +51,22 @@ $(document).ready(function () {
             nombreEssai ++;
         }
         coordonneesPommes.push([newCx, newCy]);
-        insertCircle(newCx, newCy);
     }
+
+    insertPommes();
+    
+    var coordonneesQueue = [];
+    for (i = 2; i <= 8; i += 2) {
+        coordonneesQueue.push([i, positionQueue]);
+    }
+    insertTail();
 
     $("body").keydown(function (event) {
         var keyPress = event.which;
         move(keyPress);
         insertIcon();
+        insertPommes();
         insertTail();
-        for (i = 0; i < coordonneesPommes.length; i++) {
-            var pommeCourante = coordonneesPommes[i];
-            var PommeCx = pommeCourante[0];
-            var PommeCy = pommeCourante[1];
-            insertCircle(PommeCx, PommeCy);
-        }
     });
 
     function collision(newElementPosition, elementPosition, elementSize,  perimeter) {
@@ -84,13 +79,22 @@ $(document).ready(function () {
     };
 
     function insertTail() {
-        var tailPartSize = 2;
+        var tailSizePart = 2;
         for (i = 0; i < coordonneesQueue.length; i++) {
             var partieQueue = coordonneesQueue[i];
-            ctx.rect(partieQueue[0], partieQueue[1], tailPartSize, tailPartSize);
+            ctx.rect(partieQueue[0], partieQueue[1], tailSizePart, tailSizePart);
             ctx.stroke();
         }
     }
+
+    function insertPommes() {
+        for (i = 0; i < coordonneesPommes.length; i++) {
+            var pommeCourante = coordonneesPommes[i];
+            var PommeCx = pommeCourante[0];
+            var PommeCy = pommeCourante[1];
+            insertCircle(PommeCx, PommeCy);
+        }
+    };
 
     function insertCircle(cx, cy) {
         ctx.beginPath();
@@ -117,15 +121,14 @@ $(document).ready(function () {
             ey += 1
         }
 
-        coordonneesQueue.splice(0, 1);
-        coordonneesQueue.push([ex, ey + 1]);
-        console.log(coordonneesQueue);
+       coordonneesQueue.splice(0, 1);
+       coordonneesQueue.push([ex - 3, ey + 1]);
 
         mangeFruits([ex, ey]);
     };
 
     function mangeFruits(e) {
-                var indexToRemove;
+        var indexToRemove;
         for (i = 0; i < coordonneesPommes.length; i++) {
             var pomme = coordonneesPommes[i];
             var collisionPomme = collision(pomme, e, eWidth, 0);
@@ -135,7 +138,7 @@ $(document).ready(function () {
         }
         if((typeof(indexToRemove) !== 'undefined')) {
             coordonneesPommes.splice(indexToRemove, 1);
-            coordonneesQueue.push([ex + 2, ey + 1]);
+            coordonneesQueue.push([ex - 3, ey + 1]);
         }
     }
 });

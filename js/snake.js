@@ -2,9 +2,10 @@ $(document).ready(function () {
     var canvas = $("#snakeBoard");
     var ctx = canvas.get(0).getContext("2d");
     // Initialisation position Icone Econocom
-    var ex = 10;
+    var ex = 20;
     var ey = 10;
     var positionQueue = ey + 1;
+    var distancePartieQueue = 4;
     var eWidth = 6;
     var eHeight = 5;
     // Initialisation position Cercle
@@ -19,7 +20,7 @@ $(document).ready(function () {
     var titre = $("#titre");
 
     var coordonneesPommes = [];
-    var nbPommes = 10;
+    var nbPommes = 1;
     for (i = 0; i < nbPommes; i++) {
         var newCx;
         var newCy;
@@ -56,7 +57,7 @@ $(document).ready(function () {
     insertPommes();
     
     var coordonneesQueue = [];
-    for (i = 2; i <= 8; i += 2) {
+    for (i = 4; i <= 16; i += distancePartieQueue) {
         coordonneesQueue.push([i, positionQueue]);
     }
     insertTail();
@@ -111,21 +112,29 @@ $(document).ready(function () {
     };
 
     function move(keyPress) {
+        var toucheDeplacement = [37, 38, 39, 40];
+        var vitesseDeplacement = 4;
         if (keyPress == 37 && ex > 0) {
-            ex -= 1;
+            ex -= vitesseDeplacement;
         } else if (keyPress == 38 && ey > 0) {
-            ey -= 1.
+            ey -= vitesseDeplacement;
         } else if (keyPress == 39 && ex < (canvasWidth - eWidth)) {
-            ex += 1
+            ex += vitesseDeplacement;
         } else if (keyPress == 40 && ey < (canvasHeight - eHeight)) {
-            ey += 1
+            ey += vitesseDeplacement;
         }
 
-       coordonneesQueue.splice(0, 1);
-       coordonneesQueue.push([ex - 3, ey + 1]);
-
-        mangeFruits([ex, ey]);
+       if(toucheDeplacement.includes(keyPress)) {
+            deplacerQueue([ex, ey]);
+            mangeFruits([ex, ey]);
+       }
+ 
     };
+
+    function deplacerQueue(e) {
+        coordonneesQueue.splice(0, 1);
+        coordonneesQueue.push([ex - distancePartieQueue, ey + 1]);
+    }
 
     function mangeFruits(e) {
         var indexToRemove;
@@ -138,7 +147,7 @@ $(document).ready(function () {
         }
         if((typeof(indexToRemove) !== 'undefined')) {
             coordonneesPommes.splice(indexToRemove, 1);
-            coordonneesQueue.push([ex - 3, ey + 1]);
+            coordonneesQueue.unshift([ex - 4, ey + 1]);
         }
     }
 });

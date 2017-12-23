@@ -5,7 +5,7 @@ $(document).ready(function () {
     var ex = 20;
     var ey = 10;
     var positionQueue = ey + 1;
-    var distancePartieQueue = 4;
+    var vitesseDeplacement = 4;
     var eWidth = 6;
     var eHeight = 5;
     // Initialisation position Cercle
@@ -20,7 +20,7 @@ $(document).ready(function () {
     var titre = $("#titre");
 
     var coordonneesPommes = [];
-    var nbPommes = 1;
+    var nbPommes = 10;
     for (i = 0; i < nbPommes; i++) {
         var newCx;
         var newCy;
@@ -57,10 +57,11 @@ $(document).ready(function () {
     insertPommes();
     
     var coordonneesQueue = [];
-    for (i = 4; i <= 16; i += distancePartieQueue) {
+    for (i = 4; i <= 16; i += vitesseDeplacement) {
         coordonneesQueue.push([i, positionQueue]);
     }
     insertTail();
+    drawCanvas();
 
     $("body").keydown(function (event) {
         var keyPress = event.which;
@@ -73,7 +74,7 @@ $(document).ready(function () {
             insertIcon();
             insertPommes();
             insertTail();
-        }
+            drawCanvas();        }
     });
 
     function collision(newElementPosition, elementPosition, elementSize,  perimeter) {
@@ -90,29 +91,28 @@ $(document).ready(function () {
         for (i = 0; i < coordonneesQueue.length; i++) {
             var partieQueue = coordonneesQueue[i];
             insertRect(partieQueue[0], partieQueue[1], tailSizePart);
-
         }
     }
 
     function insertPommes() {
+
         for (i = 0; i < coordonneesPommes.length; i++) {
             var pommeCourante = coordonneesPommes[i];
             var PommeCx = pommeCourante[0];
             var PommeCy = pommeCourante[1];
             insertCircle(PommeCx, PommeCy);
+            drawCanvas();
         }
     };
 
     function insertCircle(cx, cy) {
         ctx.beginPath();
         ctx.arc(cx, cy, cf, cg, 2 * Math.PI);
-        ctx.stroke();
     };
 
 
     function insertRect(cx, cy, size) {
         ctx.rect(cx, cy, size, size);
-        ctx.stroke();
     };
 
     function insertIcon() {
@@ -122,9 +122,13 @@ $(document).ready(function () {
         }
     };
 
+    function drawCanvas() {
+        ctx.stroke();
+        ctx.fill();
+    };
+
     function move(keyPress) {
         var toucheDeplacement = [37, 38, 39, 40];
-        var vitesseDeplacement = 4;
         if (keyPress == 37 && ex > 0) {
             ex -= vitesseDeplacement;
         } else if (keyPress == 38 && ey > 0) {
@@ -144,7 +148,7 @@ $(document).ready(function () {
 
     function deplacerQueue(e) {
         coordonneesQueue.splice(0, 1);
-        coordonneesQueue.push([ex - distancePartieQueue, ey + 1]);
+        coordonneesQueue.push([ex - vitesseDeplacement, ey + 1]);
     }
 
     function mangeFruits(e) {
@@ -158,7 +162,7 @@ $(document).ready(function () {
         }
         if((typeof(indexToRemove) !== 'undefined')) {
             coordonneesPommes.splice(indexToRemove, 1);
-            coordonneesQueue.unshift([ex - 4, ey + 1]);
+            coordonneesQueue.unshift([ex - vitesseDeplacement, ey + 1]);
         }
     }
 });

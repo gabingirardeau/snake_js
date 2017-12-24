@@ -6,11 +6,10 @@
     margin: auto;
     display: block;
     border: medium solid greenyellow;
-    height: 800px;
-    width: 1200px;
-
  }
 
 #e_econocom {
     display: none;
+    width: 30px;
+    height: 25px;
 }

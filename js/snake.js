@@ -1,37 +1,36 @@
 $(document).ready(function () {
     var canvas = $("#snakeBoard");
+    var e_image = $("#e_conocom");
+    var titre = $("#titre");
     var ctx = canvas.get(0).getContext("2d");
     // Initialisation position Icone Econocom
-    var ex = 20;
-    var ey = 10;
-    var positionQueue = ey + 1;
-    var vitesseDeplacement = 4;
-    var eWidth = 6;
-    var eHeight = 5;
+    var ex = 50;
+    var ey = 20;
+    var decalageQueue = 7;
+    var vitesseDeplacement = 10;
+    var eWidth = 30;
+    var eHeight = 30;
     // Initialisation position Cercle
-    var cf = 2;
+    var pommeSize = 10;
     var cg = 0;
-    var cSize = cf + 1;
 
-    var canvasWidth = 300;
-    var canvasHeight = 150;
+    var canvasWidth = canvas.width();
+    var canvasHeight = canvas.height();
     insertIcon();
-    var image = $("#e_conocom");
-    var titre = $("#titre");
 
     var coordonneesPommes = [];
     var nbPommes = 10;
+    var perimetrePomme = 100;
     for (i = 0; i < nbPommes; i++) {
         var newCx;
         var newCy;
-        var perimetrePomme = 5;
         var testPommeValide = false;
         // Test qu'aucune colision n'est présente avec une autre pomme
         var nombreEssai = 0; 
         var nombreMaxEssai = 100; 
         while (!testPommeValide && nombreEssai < nombreMaxEssai) {
-            newCx = getNombreAleatoire(cSize, (canvasWidth - cSize));
-            newCy = getNombreAleatoire(cSize, (canvasHeight - cSize));
+            newCx = getNombreAleatoire(pommeSize, (canvasWidth - pommeSize));
+            newCy = getNombreAleatoire(pommeSize, (canvasHeight - pommeSize));
 
             if (coordonneesPommes.length == 0) {
                 testPommeValide = true;
@@ -40,9 +39,8 @@ $(document).ready(function () {
                     var pomme = coordonneesPommes[j];
                     var cx = pomme[0];
                     var cy = pomme[1];
-                    var cSize = cf + 1;
-                    var pommeAbsente = !collision([newCx, newCy], pomme, cSize, perimetrePomme);
-                    var eAbsent = !collision([newCx, newCy], [ex, ey], eWidth, 20);
+                    var pommeAbsente = !collision([newCx, newCy], pomme, pommeSize, perimetrePomme);
+                    var eAbsent = !collision([newCx, newCy], [ex, ey], eWidth);
                     testPommeValide = pommeAbsente && eAbsent; 
                     if (!testPommeValide) {
                         break;
@@ -57,8 +55,8 @@ $(document).ready(function () {
     insertPommes();
     
     var coordonneesQueue = [];
-    for (i = 4; i <= 16; i += vitesseDeplacement) {
-        coordonneesQueue.push([i, positionQueue]);
+    for (i = (ex - 4 * vitesseDeplacement); i <= ex - vitesseDeplacement; i += vitesseDeplacement) {
+        coordonneesQueue.push([i, ey + decalageQueue]);
     }
     insertTail();
     drawCanvas();
@@ -87,7 +85,7 @@ $(document).ready(function () {
     };
 
     function insertTail() {
-        var tailSizePart = 2;
+        var tailSizePart = 10;
         for (i = 0; i < coordonneesQueue.length; i++) {
             var partieQueue = coordonneesQueue[i];
             insertRect(partieQueue[0], partieQueue[1], tailSizePart);
@@ -107,7 +105,7 @@ $(document).ready(function () {
 
     function insertCircle(cx, cy) {
         ctx.beginPath();
-        ctx.arc(cx, cy, cf, cg, 2 * Math.PI);
+        ctx.arc(cx, cy, pommeSize, cg, 2 * Math.PI);
     };
 
 
@@ -129,6 +127,7 @@ $(document).ready(function () {
 
     function move(keyPress) {
         var toucheDeplacement = [37, 38, 39, 40];
+        console.log(keyPress);
         if (keyPress == 37 && ex > 0) {
             ex -= vitesseDeplacement;
         } else if (keyPress == 38 && ey > 0) {
@@ -139,6 +138,8 @@ $(document).ready(function () {
             ey += vitesseDeplacement;
         }
 
+        console.log("ex : " + ex);
+        console.log("ey : " + ey);
        if(toucheDeplacement.includes(keyPress)) {
             deplacerQueue([ex, ey]);
             mangeFruits([ex, ey]);
@@ -148,7 +149,7 @@ $(document).ready(function () {
 
     function deplacerQueue(e) {
         coordonneesQueue.splice(0, 1);
-        coordonneesQueue.push([ex - vitesseDeplacement, ey + 1]);
+        coordonneesQueue.push([ex - vitesseDeplacement, ey + decalageQueue]);
     }
 
     function mangeFruits(e) {
@@ -162,7 +163,7 @@ $(document).ready(function () {
         }
         if((typeof(indexToRemove) !== 'undefined')) {
             coordonneesPommes.splice(indexToRemove, 1);
-            coordonneesQueue.unshift([ex - vitesseDeplacement, ey + 1]);
+            coordonneesQueue.unshift([ex - vitesseDeplacement, ey + decalageQueue]);
         }
     }
 });

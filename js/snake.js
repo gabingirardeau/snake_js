@@ -3,6 +3,13 @@ $(document).ready(function () {
     var e_image = $("#e_conocom");
     var titre = $("#titre");
     var ctx = canvas.get(0).getContext("2d");
+
+    const left = 37;
+    const up = 38;
+    const right = 39;
+    const down = 40;
+
+    var dernierDeplacement = right;
     // Initialisation position Icone Econocom
     var ex = 50;
     var ey = 20;
@@ -72,7 +79,8 @@ $(document).ready(function () {
             insertIcon();
             insertPommes();
             insertTail();
-            drawCanvas();        }
+            drawCanvas();        
+        }
     });
 
     function collision(newElementPosition, elementPosition, elementSize,  perimeter) {
@@ -114,9 +122,34 @@ $(document).ready(function () {
     };
 
     function insertIcon() {
+        var angleInDegrees;
+        var decalageX;
+        var decalageY;
+        if(dernierDeplacement == left) {
+            angleInDegrees = 180;
+            decalageX = 0;
+            decalageY = 0;
+        } else if(dernierDeplacement == up) {
+            angleInDegrees = 270;
+            decalageX = 0;
+            decalageY = 0;
+        } else if(dernierDeplacement == right) {
+            angleInDegrees = 0;
+            decalageX = 0;
+            decalageY = 0;
+        } else if(dernierDeplacement == down) {
+            angleInDegrees = 90;
+            decalageX = 0;
+            decalageY = 0;
+        } 
+        var angleInRadian = angleInDegrees * Math.PI/180;
         var img = $("#e_econocom");
         if (img.get(0)) {
-            ctx.drawImage(img.get(0), ex, ey);
+            ctx.translate(ex, ey);
+            ctx.rotate(angleInRadian);
+            ctx.drawImage(img.get(0), 0, 0);
+            ctx.rotate(-angleInRadian);
+            ctx.translate(-ex, -ey);
         }
     };
 
@@ -126,21 +159,19 @@ $(document).ready(function () {
     };
 
     function move(keyPress) {
-        var toucheDeplacement = [37, 38, 39, 40];
-        console.log(keyPress);
-        if (keyPress == 37 && ex > 0) {
+        var toucheDeplacement = [left, up, right, down];
+        if (keyPress == left && ex > 0) {
             ex -= vitesseDeplacement;
-        } else if (keyPress == 38 && ey > 0) {
+        } else if (keyPress == up && ey > 0) {
             ey -= vitesseDeplacement;
-        } else if (keyPress == 39 && ex < (canvasWidth - eWidth)) {
+        } else if (keyPress == right && ex < (canvasWidth - eWidth)) {
             ex += vitesseDeplacement;
-        } else if (keyPress == 40 && ey < (canvasHeight - eHeight)) {
+        } else if (keyPress == down && ey < (canvasHeight - eHeight)) {
             ey += vitesseDeplacement;
         }
 
-        console.log("ex : " + ex);
-        console.log("ey : " + ey);
        if(toucheDeplacement.includes(keyPress)) {
+            dernierDeplacement = keyPress;
             deplacerQueue([ex, ey]);
             mangeFruits([ex, ey]);
        }
